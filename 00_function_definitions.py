@@ -157,4 +157,26 @@ def transfer_vax(m_eff, y0, k):
         y1.append(-1)
         return y1
     
+def generate_random (k, P):
+    """
+    This function generates a random allocation of available vaccines to the k populations
+        k: (int) the number of populations in the model
+        P: (int) the total number of vaccines available
+    """
+    V = np.zeros(k)
+    weights = np.zeros(k)
+    numbers = np.sort(np.concatenate(([0], rnd.random(k - 1), [1])))
+
+    suma = 0
+    for i in range(k):
+        weights[i] = numbers[i+1] - numbers[i]
+        V[i] = round(P*weights[i], -1)
+        suma = suma + V[i]
+        
+    suma = suma - V[k-1]
+    V[k-1] = P - suma
+    
+    np.random.shuffle(V)
+    
+    return V
     
